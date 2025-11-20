@@ -35,8 +35,6 @@ class LoginRequest extends FormRequest
     /**
      * Attempt to authenticate the request's credentials.
      *
-     * Supports both bcrypt-hashed passwords and plain-text passwords.
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
@@ -45,37 +43,15 @@ class LoginRequest extends FormRequest
 
         $credentials = $this->only('email', 'password');
 
-        // Retrieve user by credentials
-        $user = Auth::getProvider()->retrieveByCredentials($credentials);
-
-        if (!$user) {
+        // Attempt login using Laravel's built-in bcrypt validation
+        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
-        $passwordValid = false;
-
-        // Check if stored password is bcrypt hash
-        if (password_get_info($user->password)['algo'] !== 0) {
-            // Hashed password: use Laravel validation
-            $passwordValid = Auth::getProvider()->validateCredentials($user, $credentials);
-        } else {
-            // Plain-text password comparison
-            $passwordValid = $user->password === $credentials['password'];
-        }
-
-        if (!$passwordValid) {
-            RateLimiter::hit($this->throttleKey());
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
-        }
-
-        // Log in manually
-        Auth::login($user, $this->boolean('remember'));
-
+        // Clear rate limiter on successful login
         RateLimiter::clear($this->throttleKey());
     }
 
@@ -86,7 +62,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -107,6 +83,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }
