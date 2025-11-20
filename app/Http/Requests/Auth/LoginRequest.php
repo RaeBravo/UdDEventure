@@ -35,19 +35,46 @@ class LoginRequest extends FormRequest
     /**
      * Attempt to authenticate the request's credentials.
      *
+     * Supports both bcrypt-hashed passwords and plain-text passwords.
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        $credentials = $this->only('email', 'password');
 
+        // Retrieve user by credentials
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+        if (!$user) {
+            RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
+
+        $passwordValid = false;
+
+        // Check if stored password is bcrypt hash
+        if (password_get_info($user->password)['algo'] !== 0) {
+            // Hashed password: use Laravel validation
+            $passwordValid = Auth::getProvider()->validateCredentials($user, $credentials);
+        } else {
+            // Plain-text password comparison
+            $passwordValid = $user->password === $credentials['password'];
+        }
+
+        if (!$passwordValid) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Log in manually
+        Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());
     }
