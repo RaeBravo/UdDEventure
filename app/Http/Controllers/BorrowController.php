@@ -78,7 +78,7 @@ class BorrowController extends Controller
             'item_id' => ['required', 'exists:items,id'],
             'purpose' => ['required', 'string', 'max:5000'],
             'quantity' => ['required', 'integer', 'min:1'],
-            'contact_number' => ['nullable', 'string', 'max:20'],
+            'contact_number' => ['required', 'numeric', 'digits_between:10,11'],
         ]);
 
         // Check if requested quantity exceeds available quantity

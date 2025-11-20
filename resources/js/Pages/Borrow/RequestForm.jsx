@@ -42,7 +42,7 @@ export default function BorrowRequestForm() {
                     </div>
                     <div>
                         <label className="block text-sm mb-1" htmlFor="student_id">Student ID</label>
-                        <input id="student_id" name="student_id" type="number" value={data.student_id} onChange={(e)=>setData('student_id', e.target.value)} className={`w-full px-3 py-2 rounded bg-slate-900 border ${errors.student_id ? 'border-red-500' : 'border-slate-700'}`} required />
+                        <input id="student_id" name="student_id" type="text" value={data.student_id} onChange={(e)=>setData('student_id', e.target.value)} className={`w-full px-3 py-2 rounded bg-slate-900 border ${errors.student_id ? 'border-red-500' : 'border-slate-700'}`} required />
                         {errors.student_id && <p className="text-red-400 text-sm mt-1">{errors.student_id}</p>}
                     </div>
                     <div>
@@ -114,7 +114,28 @@ export default function BorrowRequestForm() {
                     </div>
                     <div>
                         <label className="block text-sm mb-1" htmlFor="contact_number">Contact Number</label>
-                        <input id="contact_number" name="contact_number" type="tel" value={data.contact_number} onChange={(e)=>setData('contact_number', e.target.value)} className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-700" placeholder="Your phone number for contact" />
+                        <input 
+                            id="contact_number" 
+                            name="contact_number" 
+                            type="tel" 
+                            value={data.contact_number} 
+                            onChange={(e)=>{
+                                const value = e.target.value.replace(/[^0-9]/g, ''); // Only allow digits
+                                if (value.length <= 11) {
+                                    setData('contact_number', value);
+                                }
+                            }} 
+                            className={`w-full px-3 py-2 rounded bg-slate-900 border ${errors.contact_number ? 'border-red-500' : 'border-slate-700'}`}
+                           
+                            maxLength="11"
+                            pattern="[0-9]{10,11}"
+                            required
+                        />
+                        {errors.contact_number && <p className="text-red-400 text-sm mt-1">{errors.contact_number}</p>}
+                        
+                        {data.contact_number && (
+                            <p className="text-xs text-slate-400 mt-1">{data.contact_number.length}/11 digits</p>
+                        )}
                     </div>
                     <div className="flex items-center gap-3">
                         <button type="submit" disabled={processing} className="w-[131px] h-[45px] rounded-[15px] cursor-pointer

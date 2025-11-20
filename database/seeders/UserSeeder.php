@@ -16,8 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user if it doesn't exist, or update password if it does
-        $admin = User::updateOrCreate(
+        // Create admin user if it doesn't exist
+        $admin = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
             [
                 'name' => 'Admin User',
