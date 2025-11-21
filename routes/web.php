@@ -64,6 +64,12 @@ Route::get('/events/{event}', [EventController::class, 'show'])->name('events.sh
 Route::get('/events/{event}/bracket/view', [TournamentController::class, 'publicViewBracket'])->name('events.publicViewBracket');
 
 // ============================================
+// Public Rulebook Access
+// ============================================
+Route::get('/events/{event}/rulebook/view', [EventController::class, 'viewRulebook'])->name('events.rulebook.view');
+Route::get('/events/{event}/rulebook/download', [EventController::class, 'downloadRulebook'])->name('events.rulebook.download');
+
+// ============================================
 // Event Registration (Single Player Version)
 // ============================================
 
@@ -193,8 +199,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
     Route::post('/events/{id}/mark-done', [EventController::class, 'markDone'])->name('events.markDone');
     Route::post('/events/{id}/mark-undone', [EventController::class, 'markUndone'])->name('events.markUndone');
-    Route::get('/events/{event}/rulebook/view', [EventController::class, 'viewRulebook'])->name('events.rulebook.view');
-    Route::get('/events/{event}/rulebook/download', [EventController::class, 'downloadRulebook'])->name('events.rulebook.download');
 
     // Bracket Management
     Route::get('/dashboard/bracket', [CreateBracketController::class, 'bracket'])->name('bracket');
