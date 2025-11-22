@@ -33,7 +33,11 @@ class Tournament extends Model
      */
     public function matches()
     {
-        return $this->hasMany(TournamentMatch::class);
+        return $this->hasMany(TournamentMatch::class)
+            ->orderBy('round')
+            ->orderBy('match_number')
+            ->orderBy('position')
+            ->orderBy('id');
     }
 
     /**

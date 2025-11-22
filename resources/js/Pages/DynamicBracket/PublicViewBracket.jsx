@@ -14,7 +14,15 @@ export default function PublicViewBracket({ event, tournament }) {
     const transformMatchesForChallonge = (backendMatches) => {
         if (!backendMatches) return [];
         
-        return backendMatches.map(match => ({
+        // Sort matches consistently to prevent position switching
+        const sortedMatches = [...backendMatches].sort((a, b) => {
+            if (a.round !== b.round) return a.round - b.round;
+            if (a.match_number !== b.match_number) return (a.match_number || 0) - (b.match_number || 0);
+            if (a.position !== b.position) return (a.position || 0) - (b.position || 0);
+            return a.id - b.id;
+        });
+        
+        return sortedMatches.map(match => ({
             id: match.id,
             round: match.round,
             match_number: match.match_number,
