@@ -434,18 +434,28 @@ class DoubleEliminationSimulator
                     $wr1Count = count($wr1Matches);
                     $wr2Count = count($wr2Matches);
                     
-                    // LR1: Gets all WR1 + as many WR2 as needed to match WR1 count
-                    foreach ($wr1Matches as $match) {
-                        $lbQueues[1][] = ['type' => 'wb_loser', 'from_match' => $match['id']];
-                    }
-                    $wr2ToLR1 = min($wr1Count, $wr2Count);
-                    for ($i = 0; $i < $wr2ToLR1; $i++) {
-                        $lbQueues[1][] = ['type' => 'wb_loser', 'from_match' => $wr2Matches[$i]['id']];
-                    }
-                    
-                    // LR2: Gets remaining WR2 losers (if any)
-                    for ($i = $wr2ToLR1; $i < $wr2Count; $i++) {
-                        $lbQueues[2][] = ['type' => 'wb_loser', 'from_match' => $wr2Matches[$i]['id']];
+                    // Special case for 5 teams: pair WR1 M1 with WR2 M2 (not M1) to avoid rematches
+                    if ($teamCount === 5 && $wr1Count == 1 && $wr2Count == 2) {
+                        // LR1: WR1_M1 loser + WR2_M2 loser (skip WR2_M1)
+                        $lbQueues[1][] = ['type' => 'wb_loser', 'from_match' => $wr1Matches[0]['id']];
+                        $lbQueues[1][] = ['type' => 'wb_loser', 'from_match' => $wr2Matches[1]['id']];
+                        
+                        // LR2: WR2_M1 loser (the one we skipped for LR1)
+                        $lbQueues[2][] = ['type' => 'wb_loser', 'from_match' => $wr2Matches[0]['id']];
+                    } else {
+                        // LR1: Gets all WR1 + as many WR2 as needed to match WR1 count
+                        foreach ($wr1Matches as $match) {
+                            $lbQueues[1][] = ['type' => 'wb_loser', 'from_match' => $match['id']];
+                        }
+                        $wr2ToLR1 = min($wr1Count, $wr2Count);
+                        for ($i = 0; $i < $wr2ToLR1; $i++) {
+                            $lbQueues[1][] = ['type' => 'wb_loser', 'from_match' => $wr2Matches[$i]['id']];
+                        }
+                        
+                        // LR2: Gets remaining WR2 losers (if any)
+                        for ($i = $wr2ToLR1; $i < $wr2Count; $i++) {
+                            $lbQueues[2][] = ['type' => 'wb_loser', 'from_match' => $wr2Matches[$i]['id']];
+                        }
                     }
                     
                     // LR3 onwards: WR(n) → LR(2n-3) pattern for ALL remaining WR rounds

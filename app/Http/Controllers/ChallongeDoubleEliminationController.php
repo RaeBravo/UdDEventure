@@ -435,7 +435,17 @@ class ChallongeDoubleEliminationController extends Controller
             // 5-6, 9-10, 11+ teams: LR1 combines WR1 + limited WR2
             // Pattern: pair WR1 count with equal WR2 count
             $wr2ForLR1 = min($wr1Count, $wr2Count);
-            $lr1Sources = array_merge($wr1Matches, array_slice($wr2Matches, 0, $wr2ForLR1));
+            
+            // Special case for 5 teams: pair WR1 M1 with WR2 M2 (not M1) to avoid rematches
+            if ($bracketSize == 5 && $wr1Count == 1 && $wr2Count == 2) {
+                // For 5 teams: LR1 should be WR1_M1 loser vs WR2_M2 loser (match 3)
+                // WR2_M1 loser (match 2) goes to LR2
+                $lr1Sources = [$wr1Matches[0], $wr2Matches[1]]; // WR1 M1 + WR2 M2 (skip WR2 M1)
+                $wr2ForLR1 = 0; // Override - we manually selected WR2 match
+            } else {
+                $lr1Sources = array_merge($wr1Matches, array_slice($wr2Matches, 0, $wr2ForLR1));
+            }
+            
             $lr1SourceRound = 2; // Mark that we used WR2 for LR1
             $lr2SourceRound = 2; // LR2 gets remaining WR2 (+ potentially WR3 for larger brackets)
         }
@@ -444,6 +454,7 @@ class ChallongeDoubleEliminationController extends Controller
         $oddCarryover = null;
         $oddLR1Source = null; // Track odd LR1 source (3rd WR1 loser) to feed into LR2
         $usedWR2Count = 0; // Track how many WR2 matches fed into LR1
+        $skipFirstWR2ForLR2 = false; // Special flag for 5-team bracket
 
         // Track which WR round we're feeding from
         $nextWRFeedRound = $lr1SourceRound == 1 ? 2 : 3; // Start feeding from next WR round after LR1 source
@@ -486,7 +497,13 @@ class ChallongeDoubleEliminationController extends Controller
                 }
                 
                 // Track how many WR2 we used
-                $usedWR2Count = max(0, ($pairsToMake * 2) - $wr1Count);
+                // Special handling for 5-team bracket where we skip WR2_M1 and use WR2_M2 in LR1
+                if ($bracketSize == 5 && $wr1Count == 1 && $wr2Count == 2) {
+                    $usedWR2Count = 1; // We used WR2_M2 (index 1), WR2_M1 (index 0) goes to LR2
+                    $skipFirstWR2ForLR2 = true; // Flag to get only WR2_M1 for LR2
+                } else {
+                    $usedWR2Count = max(0, ($pairsToMake * 2) - $wr1Count);
+                }
                 
                 // Handle odd LR1 source - feed directly into LR2
                 if (count($lr1Sources) % 2 == 1) {
@@ -503,7 +520,12 @@ class ChallongeDoubleEliminationController extends Controller
                 $wrLosers = [];
                 if ($lr == 2) {
                     // LR2 sources vary by bracket type
-                    $remainingWR2 = array_slice($wr2Matches, $usedWR2Count);
+                    // Special handling for 5-team bracket: get only WR2_M1 (index 0), not WR2_M2 which was used in LR1
+                    if ($skipFirstWR2ForLR2) {
+                        $remainingWR2 = [$wr2Matches[0]]; // Get only the first WR2 match (WR2_M1)
+                    } else {
+                        $remainingWR2 = array_slice($wr2Matches, $usedWR2Count);
+                    }
                     
                     // LR2 ALWAYS gets only remaining WR2 (never WR3)
                     // WR3 losers feed into LR4 via the else block below
