@@ -19,16 +19,17 @@ class Event extends Model
     protected static function booted()
     {
         static::deleting(function ($event) {
-            // Delete all associated images from storage and database
+            // Delete all associated image files from storage
+            // Note: Database records are automatically deleted via onDelete('cascade') foreign key
             $event->images->each(function ($image) {
                 try {
                     if (Storage::disk('public')->exists($image->image_path)) {
                         Storage::disk('public')->delete($image->image_path);
                     }
-                    $image->delete();
+                    // Removed $image->delete() - cascade delete handles this automatically
                 } catch (\Exception $e) {
                     // Log the error but don't stop the deletion process
-                    \Log::error('Error deleting event image: ' . $e->getMessage(), [
+                    \Log::error('Error deleting event image file: ' . $e->getMessage(), [
                         'image_id' => $image->id,
                         'event_id' => $event->id
                     ]);

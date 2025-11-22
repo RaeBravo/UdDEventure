@@ -907,23 +907,23 @@ class TournamentController extends Controller
         $matches[] = ['temp_id' => 'WR2_M1', 'round' => 2, 'match_number' => 2, 'bracket' => 'winners',
             'team1_temp_id' => 'team_1', 'team2_temp_id' => 'team_2', 
             'team1_name' => $teams[1]['name'], 'team2_name' => $teams[2]['name'],
-            'next_match_temp_id' => 'WR3_M1', 'loser_to' => 'LR1_M1'];
+            'next_match_temp_id' => 'WR3_M1', 'loser_to' => 'LR2_M1'];
         
         // Match 3: Seed 1 (RAE) vs Winner of Match 1
         $matches[] = ['temp_id' => 'WR2_M2', 'round' => 2, 'match_number' => 3, 'bracket' => 'winners',
             'team1_temp_id' => 'team_0', 'team2_temp_id' => null, 
             'team1_name' => $teams[0]['name'], 'team2_name' => 'TBD',
-            'next_match_temp_id' => 'WR3_M1', 'loser_to' => 'LR2_M1'];
+            'next_match_temp_id' => 'WR3_M1', 'loser_to' => 'LR1_M1'];
         
         // Losers Round 1 (1 match) - Match 4
-        // Receives: Loser of WR1_M1 vs Loser of WR2_M1
+        // Receives: Loser of WR1_M1 vs Loser of WR2_M2
         $matches[] = ['temp_id' => 'LR1_M1', 'round' => 4, 'match_number' => 4, 'bracket' => 'losers',
             'team1_temp_id' => null, 'team2_temp_id' => null, 
             'team1_name' => 'TBD', 'team2_name' => 'TBD',
             'next_match_temp_id' => 'LR2_M1', 'loser_to' => null];
         
         // Losers Round 2 (1 match) - Match 5
-        // Receives: Winner of LR1_M1 vs Loser of WR2_M2
+        // Receives: Winner of LR1_M1 vs Loser of WR2_M1
         $matches[] = ['temp_id' => 'LR2_M1', 'round' => 5, 'match_number' => 5, 'bracket' => 'losers',
             'team1_temp_id' => null, 'team2_temp_id' => null, 
             'team1_name' => 'TBD', 'team2_name' => 'TBD',
