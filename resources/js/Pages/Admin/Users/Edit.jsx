@@ -2,33 +2,33 @@ import { Head, useForm, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function EditWriter({ auth, writer }) {
+export default function EditUser({ auth, user }) {
     const { data, setData, put, processing, errors } = useForm({
-        name: writer.name,
-        email: writer.email,
-        bio: writer.writer_profile?.bio || '',
-        specialization: writer.writer_profile?.specialization || '',
-        status: writer.writer_profile?.status || 'active',
-        role: writer.role || 'writer',
+        name: user.name,
+        email: user.email,
+        bio: user.faculty_profile?.bio || '',
+        specialization: user.faculty_profile?.specialization || '',
+        status: user.faculty_profile?.status || 'active',
+        role: user.role || 'faculty',
         password: '',
         password_confirmation: '',
     });
     
     const roles = [
         { value: 'admin', label: 'Administrator' },
-        { value: 'writer', label: 'Writer' },
+        { value: 'faculty', label: 'Faculty' },
     ];
 
     const [isEditingPassword, setIsEditingPassword] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('admin.writers.update', writer.id));
+        put(route('admin.users.update', user.id));
     };
 
     return (
         <AuthenticatedLayout>
-            <Head title="Edit Writer" />
+            <Head title="Edit User" />
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
@@ -183,7 +183,7 @@ export default function EditWriter({ auth, writer }) {
 
                                 <div className="flex justify-end space-x-3 pt-4">
                                     <a
-                                        href={route('admin.writers.index')}
+                                        href={route('admin.users.index')}
                                         className="w-[120px] h-[45px] rounded-[15px] cursor-pointer 
                                                                transition duration-300 ease-in-out 
                                                                bg-gradient-to-br from-[#C90808] to-[#C90808]/0 
@@ -203,7 +203,7 @@ export default function EditWriter({ auth, writer }) {
                                                                hover:bg-[#2e8eff]/70 hover:shadow-[0_0_10px_rgba(46,142,255,0.5)] 
                                                                focus:outline-none focus:bg-[#2e8eff]/70 focus:shadow-[0_0_10px_rgba(46,142,255,0.5)] ${processing ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     >
-                                        {processing ? 'Updating...' : 'Update Writer'}
+                                        {processing ? 'Updating...' : 'Update User'}
                                     </button>
                                 </div>
                             </form>

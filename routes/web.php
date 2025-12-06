@@ -5,7 +5,7 @@ use Illuminate\Foundation\Application;
 use Inertia\Inertia;
 
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\WriterController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\ProfileController;
@@ -222,11 +222,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/requirements/{requirement}', [RequirementsController::class, 'destroy'])->name('admin.requirements.destroy');
     });
 
-    // News and Writer Management
+    // News and User Management
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('news', NewsController::class)->except(['show']);
-        Route::resource('writers', WriterController::class);
-        Route::patch('/writers/{writer}/toggle-status', [WriterController::class, 'toggleStatus'])->name('writers.toggle-status');
+        Route::resource('users', UserController::class);
+        Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         // Borrowers Management
         Route::get('/borrowers', [BorrowersController::class, 'index'])->name('borrowers.index');
         Route::post('/items', [BorrowersController::class, 'storeItem'])->name('items.store');

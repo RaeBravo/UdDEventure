@@ -16,17 +16,17 @@ class UserPolicy
         return $user->isAdmin() || $user->id === $model->id;
     }
 
-    public function createWriter(User $user): bool
+    public function createUser(User $user): bool
     {
-        return $user->isAdmin() || $user->isWriter();
+        return $user->isAdmin() || $user->isFaculty();
     }
 
-    public function updateWriter(User $user, User $model): bool
+    public function updateUser(User $user, User $model): bool
     {
         return $user->isAdmin() || $user->id === $model->id;
     }
 
-    public function deleteWriter(User $user, User $model): bool
+    public function deleteUser(User $user, User $model): bool
     {
         return $user->isAdmin() && $user->id !== $model->id;
     }

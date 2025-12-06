@@ -7,7 +7,7 @@ const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-export default function WritersIndex({ writers }) {
+export default function UsersIndex({ users }) {
     const [isMobile, setIsMobile] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState({});
 
@@ -26,24 +26,24 @@ export default function WritersIndex({ writers }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const toggleMobileMenu = (writerId) => {
+    const toggleMobileMenu = (userId) => {
         setMobileMenuOpen(prev => ({
             ...prev,
-            [writerId]: !prev[writerId]
+            [userId]: !prev[userId]
         }));
     };
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Writers Management</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Users Management</h2>
             }
         >
-            <Head title="Writers Management" />
+            <Head title="Users Management" />
 
             <div className="py-12 px-8">
                 <div className="flex justify-end mb-6">
                     <Link
-                        href={route('admin.writers.create')}
+                        href={route('admin.users.create')}
                         className="w-[141px] h-[45px] rounded-[15px] cursor-pointer 
                                                                transition duration-300 ease-in-out 
                                                                bg-gradient-to-br from-[#2e8eff] to-[#2e8eff]/0 
@@ -73,9 +73,6 @@ export default function WritersIndex({ writers }) {
                                         Role
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider whitespace-nowrap">
-                                        News Count
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider whitespace-nowrap">
                                         Specialization
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider whitespace-nowrap">
@@ -87,52 +84,46 @@ export default function WritersIndex({ writers }) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-700">
-                                {writers.map((writer) => (
-                                    <tr key={writer.id} className="hover:bg-slate-700/30 transition-colors duration-150">
+                                {users.map((user) => (
+                                    <tr key={user.id} className="hover:bg-slate-700/30 transition-colors duration-150">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="h-10 w-10 rounded-full bg-blue-600 flex-shrink-0 flex items-center justify-center">
                                                     <span className="text-white font-medium">
-                                                        {writer.name.charAt(0).toUpperCase()}
+                                                        {user.name.charAt(0).toUpperCase()}
                                                     </span>
                                                 </div>
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-slate-100">
-                                                        {writer.name}
+                                                        {user.name}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-slate-300">{writer.email}</div>
+                                            <div className="text-sm text-slate-300">{user.email}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-3 py-1 inline-flex text-xs leading-5 font-medium rounded-full ${
-                                                writer.role === 'admin' ? 'bg-purple-900/30 text-purple-300 border border-purple-700/50' :
-                                                writer.role === 'editor' ? 'bg-blue-900/30 text-blue-300 border border-blue-700/50' :
-                                                writer.role === 'writer' ? 'bg-green-900/30 text-green-300 border border-green-700/50' :
+                                                user.role === 'admin' ? 'bg-purple-900/30 text-purple-300 border border-purple-700/50' :
+                                                user.role === 'faculty' ? 'bg-green-900/30 text-green-300 border border-green-700/50' :
                                                 'bg-gray-900/30 text-gray-300 border border-gray-700/50'
                                             }`}>
-                                                {writer.role.charAt(0).toUpperCase() + writer.role.slice(1)}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                                            <span className="px-3 py-1 inline-flex text-xs leading-5 font-medium rounded-full bg-slate-700/50 text-slate-200 border border-slate-600/50">
-                                                {writer.news_count || 0}
+                                                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className="px-3 py-1 inline-flex text-xs leading-5 font-medium rounded-full bg-slate-700/50 text-slate-200 border border-slate-600/50">
-                                                {writer.writer_profile?.specialization || 'Not specified'}
+                                                {user.faculty_profile?.specialization || 'Not specified'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                                            {new Date(writer.created_at).toLocaleDateString()}
+                                            {new Date(user.created_at).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex items-center justify-end space-x-3">
                                                 <Link
-                                                    href={route('admin.writers.show', writer.id)}
+                                                    href={route('admin.users.show', user.id)}
                                                     className="text-blue-400 hover:text-blue-200 transition-colors"
                                                     title="View Profile"
                                                 >
@@ -142,22 +133,22 @@ export default function WritersIndex({ writers }) {
                                                     </svg>
                                                 </Link>
                                                 <Link
-                                                    href={route('admin.writers.edit', writer.id)}
+                                                    href={route('admin.users.edit', user.id)}
                                                     className="text-yellow-400 hover:text-yellow-200 transition-colors"
-                                                    title="Edit Writer"
+                                                    title="Edit User"
                                                 >
                                                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                         </svg>
                                                 </Link>
                                                 <Link
-                                                    href={route('admin.writers.destroy', writer.id)}
+                                                    href={route('admin.users.destroy', user.id)}
                                                     method="delete"
                                                     as="button"
                                                     className="text-red-400 hover:text-red-200 transition-colors"
-                                                    title="Delete Writer"
+                                                    title="Delete User"
                                                     onClick={(e) => {
-                                                        if (!confirm('Are you sure you want to delete this writer? This action cannot be undone.')) {
+                                                        if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
                                                             e.preventDefault();
                                                         }
                                                     }}
@@ -176,22 +167,22 @@ export default function WritersIndex({ writers }) {
                 </div>
                 
                 {/* Empty State */}
-                {writers.length === 0 && (
+                {users.length === 0 && (
                     <div className="text-center py-12">
                         <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">No writers</h3>
-                        <p className="mt-1 text-sm text-gray-500">Get started by adding a new writer.</p>
+                        <h3 className="mt-2 text-sm font-medium text-gray-900">No users</h3>
+                        <p className="mt-1 text-sm text-gray-500">Get started by adding a new user.</p>
                         <div className="mt-6">
                             <Link
-                                href={route('admin.writers.create')}
+                                href={route('admin.users.create')}
                                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
                                 <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
                                 </svg>
-                                New Writer
+                                New User
                             </Link>
                         </div>
                     </div>

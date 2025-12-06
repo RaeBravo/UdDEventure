@@ -30,83 +30,77 @@ export default function AuthenticatedLayout({ header, children }) {
     }, [flash]);
 
     const navigationLinks = [
-        ...(user.role !== 'writer' ? [
-            {
-                label: 'Dashboard',
-                href: route('dashboard.summary'),
-                active: route().current('dashboard.summary'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z M14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z M4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z M14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                ),
-            },
-        ] : []),
-        ...(user.role !== 'writer' ? [
-            {
-                label: 'Events',
-                href: route('dashboard'),
-                active: route().current('dashboard'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z" />
-                    </svg>
-                ),
-            },
-        ] : []),
-        ...(user.role === 'admin' ? [
-            {
-                label: 'MIS Varsity Athletes',
-                href: route('mis.dashboard'),
-                active: route().current('mis.*'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                ),
-            },
-            {
-                label: 'Manage Users',
-                href: route('admin.writers.index'),
-                active: route().current('admin.writers.*'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                ),
-            },
-            {
-                label: 'Borrowers Management',
-                href: route('admin.borrowers.index'),
-                active: route().current('admin.borrowers.*'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h14a2 2 0 012 2v8a2 2 0 01-2 2H7l-4 4V9a2 2 0 012-2z" />
-                    </svg>
-                ),
-            },
-            {
-                label: 'Protests',
-                href: route('admin.complaints.index'),
-                active: route().current('admin.complaints.*'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                ),
-            },
-            {
-                label: 'Requirements',
-                href: route('admin.requirements.index'),
-                active: route().current('admin.requirements.*'),
-                icon: (
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                ),
-            },
-        ] : []),
+        {
+            label: 'Dashboard',
+            href: route('dashboard.summary'),
+            active: route().current('dashboard.summary'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z M14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z M4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z M14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+            ),
+        },
+        {
+            label: 'Events',
+            href: route('dashboard'),
+            active: route().current('dashboard'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z" />
+                </svg>
+            ),
+        },
+        {
+            label: 'MIS Varsity Athletes',
+            href: route('mis.dashboard'),
+            active: route().current('mis.*'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+            ),
+        },
+        ...(user.role === 'admin' ? [{
+            label: 'Manage Users',
+            href: route('admin.users.index'),
+            active: route().current('admin.users.*'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            ),
+        }] : []),
+        {
+            label: 'Borrowers Management',
+            href: route('admin.borrowers.index'),
+            active: route().current('admin.borrowers.*'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h14a2 2 0 012 2v8a2 2 0 01-2 2H7l-4 4V9a2 2 0 012-2z" />
+                </svg>
+            ),
+        },
+        {
+            label: 'Protests',
+            href: route('admin.complaints.index'),
+            active: route().current('admin.complaints.*'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            ),
+        },
+        {
+            label: 'Requirements',
+            href: route('admin.requirements.index'),
+            active: route().current('admin.requirements.*'),
+            icon: (
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            ),
+        },
         {
             label: 'Manage News',
             href: route('admin.news.index'),
@@ -123,8 +117,7 @@ export default function AuthenticatedLayout({ header, children }) {
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-black text-slate-100 flex">
             {/* Mobile Top Bar: Menu + Profile */}
             <div className="sm:hidden fixed top-0 left-0 w-full z-50 flex items-center gap-3 bg-slate-900/90 border-b border-slate-800/50 h-14 px-4 shadow-lg">
-                {user.role !== 'writer' && (
-                    <button
+                <button
                         className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-800/90 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                         onClick={() => setShowingNavigationDropdown((prev) => !prev)}
                         aria-label="Toggle menu"
@@ -133,10 +126,9 @@ export default function AuthenticatedLayout({ header, children }) {
                         <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                    </button>
-                )}
+                </button>
                 <Link
-                    href={user.role === 'admin' ? route('dashboard.summary') : (user.role === 'writer' ? "/admin/news" : "/dashboard")}
+                    href={user.role === 'admin' ? route('dashboard.summary') : (user.role === 'faculty' ? "/admin/news" : "/dashboard")}
                     className="flex items-center gap-2"
                     onClick={() => setShowingNavigationDropdown(false)}
                 >
@@ -195,14 +187,13 @@ export default function AuthenticatedLayout({ header, children }) {
 
             {/* Sidebar as Drawer on mobile, fixed on desktop */}
             {/* Overlay for mobile drawer */}
-            {user.role !== 'writer' && showingNavigationDropdown && (
+            {showingNavigationDropdown && (
                 <div
                     className="fixed top-14 left-0 right-0 bottom-0 z-40 bg-black/40 backdrop-blur-sm sm:hidden"
                     onClick={() => setShowingNavigationDropdown(false)}
                 />
             )}
-            {user.role !== 'writer' && (
-                <aside
+            <aside
                     className={`fixed left-0 top-14 sm:top-0 h-[calc(100vh-3.5rem)] sm:h-full w-64 bg-slate-900/80 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 border-r border-slate-800/50 shadow-2xl shadow-blue-950/30 z-50 sm:z-30 transition-transform duration-300 ease-in-out
                     ${showingNavigationDropdown ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 sm:block`}
                     style={{ display: showingNavigationDropdown ? 'block' : undefined }}
@@ -237,14 +228,13 @@ export default function AuthenticatedLayout({ header, children }) {
 
                 </div>
                 </aside>
-            )}
 
             {/* Main Content Area */}
-            <div className={`flex-1 pl-0 pt-16 overflow-x-hidden ${user.role !== 'writer' ? 'sm:pl-64 sm:pt-24' : 'sm:pt-24'}`}>
+            <div className={`flex-1 pl-0 pt-16 overflow-x-hidden sm:pl-64 sm:pt-24`}>
                 <div className="hidden sm:block fixed inset-x-0 top-0 z-40 sm:z-50 bg-slate-900/70 backdrop-blur border-b border-slate-800/60 shadow-lg shadow-blue-950/20">
                     <div className="flex items-center gap-6 px-4 md:px-6 lg:px-8 py-4">
                         <div className="flex-1 flex items-center gap-6 min-w-0">
-                            <Link href={user.role === 'admin' ? route('dashboard.summary') : (user.role === 'writer' ? "/admin/news" : "/dashboard")} className="flex items-center gap-3 flex-none text-left">
+                            <Link href={user.role === 'admin' ? route('dashboard.summary') : (user.role === 'faculty' ? "/admin/news" : "/dashboard")} className="flex items-center gap-3 flex-none text-left">
                                 <img
                                     src="/images/udd.jpg"
                                     alt="UdD Eventure logo"

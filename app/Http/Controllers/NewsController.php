@@ -24,7 +24,7 @@ class NewsController extends Controller
             'pending' => News::where('status', 'pending')->count(),
             'active' => News::where('status', 'active')->count(),
             'inactive' => News::where('status', 'inactive')->count(),
-            'writers' => User::where('role', 'writer')->count(),
+            'faculties' => User::where('role', 'faculty')->count(),
         ];
 
         return inertia('Admin/News/Index', [

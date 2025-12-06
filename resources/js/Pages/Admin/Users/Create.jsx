@@ -1,7 +1,7 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function CreateWriter() {
+export default function CreateUser() {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
@@ -13,16 +13,16 @@ export default function CreateWriter() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('admin.writers.store'));
+        post(route('admin.users.store'));
     };
 
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Add Writer</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Add User</h2>
             }
         >
-            <Head title="Add Writer" />
+            <Head title="Add User" />
 
             <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -105,7 +105,7 @@ export default function CreateWriter() {
                                         value={data.bio}
                                         onChange={(e) => setData('bio', e.target.value)}
                                         className="mt-1 block w-full bg-slate-700/50 border border-slate-600 text-slate-100 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-slate-700/70 transition-colors duration-200"
-                                        placeholder="Brief bio about the writer..."
+                                        placeholder="Brief bio about the user..."
                                     />
                                     {errors.bio && <div className="text-red-600 text-sm mt-1">{errors.bio}</div>}
                                 </div>
@@ -129,7 +129,7 @@ export default function CreateWriter() {
                                 {/* Submit Button */}
                                 <div className="flex justify-end space-x-3">
                                     <Link
-                                        href={route('admin.writers.index')}
+                                        href={route('admin.users.index')}
                                         className="w-[120px] h-[45px] rounded-[15px] cursor-pointer 
                                                                transition duration-300 ease-in-out 
                                                                bg-gradient-to-br from-[#FF0000] to-[#FF0000]/0 

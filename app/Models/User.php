@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     public const ROLE_ADMIN = 'admin';
-    public const ROLE_WRITER = 'writer';
+    public const ROLE_FACULTY = 'faculty';
 
     /**
      * The attributes that are mass assignable.
@@ -53,9 +53,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function scopeWriters($query)
+    public function scopeFaculties($query)
     {
-        return $query->where('role', self::ROLE_WRITER);
+        return $query->where('role', self::ROLE_FACULTY);
     }
 
     public function isAdmin(): bool
@@ -63,9 +63,9 @@ class User extends Authenticatable
         return $this->role === self::ROLE_ADMIN;
     }
     
-    public function isWriter(): bool
+    public function isFaculty(): bool
     {
-        return $this->role === self::ROLE_WRITER;
+        return $this->role === self::ROLE_FACULTY;
     }
 
     public function news()
@@ -73,9 +73,9 @@ class User extends Authenticatable
         return $this->hasMany(News::class, 'writer_id');
     }
 
-    public function writerProfile()
+    public function facultyProfile()
     {
-        return $this->hasOne(Writer::class);
+        return $this->hasOne(Faculty::class);
     }
     
 }

@@ -4,26 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Writer;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-class WriterController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $writers = User::whereIn('role', ['admin', 'writer'])
-            ->with('writerProfile')
+        $users = User::whereIn('role', ['admin', 'faculty'])
+            ->with('facultyProfile')
             ->withCount('news')
             ->orderBy('name')
             ->get();
 
-        return inertia('Admin/Writers/Index', [
-            'writers' => $writers,
+        return inertia('Admin/Users/Index', [
+            'users' => $users,
         ]);
     }
 
@@ -32,7 +32,7 @@ class WriterController extends Controller
      */
     public function create()
     {
-        return inertia('Admin/Writers/Create');
+        return inertia('Admin/Users/Create');
     }
 
     /**
@@ -52,61 +52,61 @@ class WriterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'writer',
+            'role' => 'faculty',
         ]);
 
-        Writer::create([
+        Faculty::create([
             'user_id' => $user->id,
             'bio' => $request->bio,
             'specialization' => $request->specialization,
         ]);
 
-        return redirect()->route('admin.writers.index')->with('success', 'Writer created successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $writer)
+    public function show(User $user)
     {
-        $this->authorize('view', $writer);
+        $this->authorize('view', $user);
 
-        $writer->load('writerProfile', 'news');
+        $user->load('facultyProfile', 'news');
 
-        return inertia('Admin/Writers/Show', [
-            'writer' => $writer,
+        return inertia('Admin/Users/Show', [
+            'user' => $user,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $writer)
+    public function edit(User $user)
     {
-        $this->authorize('update', $writer);
+        $this->authorize('update', $user);
 
-        $writer->load('writerProfile');
+        $user->load('facultyProfile');
 
-        return inertia('Admin/Writers/Edit', [
-            'writer' => $writer,
+        return inertia('Admin/Users/Edit', [
+            'user' => $user,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $writer)
+    public function update(Request $request, User $user)
     {
-        $this->authorize('update', $writer);
+        $this->authorize('update', $user);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,'.$writer->id],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'bio' => ['nullable', 'string', 'max:1000'],
             'specialization' => ['nullable', 'string', 'max:255'],
             'password' => ['nullable', 'confirmed', 'min:8'],
             'status' => ['sometimes', 'required', 'in:active,inactive'],
-            'role' => ['sometimes', 'required', 'in:admin,editor,writer,user'],
+            'role' => ['sometimes', 'required', 'in:admin,faculty'],
         ]);
 
         // Update user data
@@ -125,75 +125,72 @@ class WriterController extends Controller
             $userData['password'] = bcrypt($validated['password']);
         }
 
-        $writer->update($userData);
+        $user->update($userData);
 
-        // Update or create writer profile
-        $writerProfileData = [
+        // Update or create faculty profile
+        $facultyProfileData = [
             'bio' => $validated['bio'] ?? null,
             'specialization' => $validated['specialization'] ?? null,
         ];
 
         // Only update status if it's provided (for admin)
         if (isset($validated['status'])) {
-            $writerProfileData['status'] = $validated['status'];
+            $facultyProfileData['status'] = $validated['status'];
         }
 
-        if ($writer->writerProfile) {
-            $writer->writerProfile()->update($writerProfileData);
+        if ($user->facultyProfile) {
+            $user->facultyProfile()->update($facultyProfileData);
         } else {
-            $writer->writerProfile()->create($writerProfileData);
+            $user->facultyProfile()->create($facultyProfileData);
         }
 
-        return redirect()->route('admin.writers.index')->with('success', 'Writer updated successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $writer)
+    public function destroy(User $user)
     {
-        $this->authorize('deleteWriter', $writer);
+        $this->authorize('deleteUser', $user);
 
-        // Delete writer profile
-        $writer->writerProfile()->delete();
+        // Delete faculty profile
+        $user->facultyProfile()->delete();
 
-        // Delete writer (this will cascade delete their news due to foreign key constraint)
-        $writer->delete();
+        // Delete user (this will cascade delete their news due to foreign key constraint)
+        $user->delete();
 
-        return redirect()->route('admin.writers.index')->with('success', 'Writer deleted successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully!');
     }
 
     /**
-     * Toggle writer status.
+     * Toggle user status.
      *
-     * @param  \App\Models\User  $writer
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function toggleStatus(User $writer)
+    public function toggleStatus(User $user)
     {
-        $this->authorize('update', $writer);
+        $this->authorize('update', $user);
         
-        // Check if writer profile exists, if not create one
-        if (!$writer->writerProfile) {
-            $writer->writerProfile()->create([
+        // Check if faculty profile exists, if not create one
+        if (!$user->facultyProfile) {
+            $user->facultyProfile()->create([
                 'status' => 'active', // Default status
                 'bio' => '',
                 'specialization' => '',
             ]);
             
-            return redirect()->back()->with('success', 'Writer profile created and set to active!');
+            return redirect()->back()->with('success', 'Faculty profile created and set to active!');
         }
         
         // Toggle the status
-        $newStatus = $writer->writerProfile->status === 'active' ? 'inactive' : 'active';
+        $newStatus = $user->facultyProfile->status === 'active' ? 'inactive' : 'active';
         
-        $writer->writerProfile()->update([
+        $user->facultyProfile()->update([
             'status' => $newStatus,
         ]);
         
-        return redirect()->back()->with('success', 'Writer status updated successfully!');
+        return redirect()->back()->with('success', 'User status updated successfully!');
     }
 }

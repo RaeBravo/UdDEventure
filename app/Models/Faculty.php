@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Writer extends Model
+class Faculty extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,7 @@ class Writer extends Model
     ];
 
     /**
-     * Get the user that owns the writer profile.
+     * Get the user that owns the faculty profile.
      */
     public function user()
     {
@@ -31,7 +31,7 @@ class Writer extends Model
     }
 
     /**
-     * Get the news for the writer.
+     * Get the news for the faculty.
      */
     public function news()
     {

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Writer;
+use App\Models\Faculty;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -28,31 +28,31 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Create a test writer user
-        $writer = User::firstOrCreate(
-            ['email' => 'writer@example.com'],
+        // Create a test faculty user
+        $faculty = User::firstOrCreate(
+            ['email' => 'faculty@example.com'],
             [
-                'name' => 'Test Writer',
+                'name' => 'Test Faculty',
                 'email_verified_at' => now(),
-                'password' => Hash::make('writer123'),
+                'password' => Hash::make('faculty123'),
                 'remember_token' => Str::random(10),
-                'role' => User::ROLE_WRITER,
+                'role' => User::ROLE_FACULTY,
             ]
         );
 
-        // Create writer profile for the test writer
-        if ($writer->wasRecentlyCreated) {
-            Writer::create([
-                'user_id' => $writer->id,
-                'status' => Writer::STATUS_ACTIVE,
-                'bio' => 'Professional content writer with 5+ years of experience',
+        // Create faculty profile for the test faculty
+        if ($faculty->wasRecentlyCreated) {
+            Faculty::create([
+                'user_id' => $faculty->id,
+                'status' => Faculty::STATUS_ACTIVE,
+                'bio' => 'Professional content creator with 5+ years of experience',
                 'specialization' => 'Technology, Business',
             ]);
         }
 
         $this->command->info('Users created successfully!');
         $this->command->info('Admin: admin@gmail.com / admin123');
-        $this->command->info('Writer: writer@example.com / writer123');
+        $this->command->info('Faculty: faculty@example.com / faculty123');
         $this->command->warn('Please change the default passwords after first login!');
     }
 }
