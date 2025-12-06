@@ -28,7 +28,7 @@ class NewsPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAdmin() || $user->role === User::ROLE_WRITER;
+        return $user->isAdmin() || $user->role === User::ROLE_FACULTY;
     }
 
     /**
@@ -36,7 +36,7 @@ class NewsPolicy
      */
     public function update(User $user, News $news): bool
     {
-        return $user->isAdmin() || ($user->role === User::ROLE_WRITER && $user->id === $news->writer_id);
+        return $user->isAdmin() || ($user->role === User::ROLE_FACULTY && $user->id === $news->writer_id);
     }
 
     /**
@@ -44,7 +44,7 @@ class NewsPolicy
      */
     public function delete(User $user, News $news): bool
     {
-        return $user->isAdmin() || ($user->role === User::ROLE_WRITER && $user->id === $news->writer_id);
+        return $user->isAdmin() || ($user->role === User::ROLE_FACULTY && $user->id === $news->writer_id);
     }
 
     /**
