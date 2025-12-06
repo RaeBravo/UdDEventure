@@ -84,7 +84,7 @@ export default function PublicNavbar({
                                         className="fixed inset-0 z-40" 
                                         onClick={() => setRequestDropdownOpen(false)}
                                     />
-                                    <div className="absolute left-0 mt-3 w-56 rounded-xl shadow-2xl bg-slate-800/95 backdrop-blur-sm border border-slate-700/50 z-50 overflow-hidden">
+                                    <div className="absolute right-0 mt-3 w-56 rounded-xl shadow-2xl bg-slate-800/95 backdrop-blur-sm border border-slate-700/50 z-50 overflow-hidden">
                                         <div className="py-2">
                                             <button
                                                 onClick={() => {
@@ -177,21 +177,30 @@ export default function PublicNavbar({
                                 <Link
                                     href={route('borrow.index')}
                                     className="block py-2 text-base text-slate-300 hover:text-sky-200"
-                                    onClick={() => setMobileOpen(false)}
+                                    onClick={() => {
+                                        setMobileOpen(false);
+                                        setRequestDropdownOpen(false);
+                                    }}
                                 >
                                     Borrow
                                 </Link>
                                 <Link
                                     href={route('complaints.index')}
                                     className="block py-2 text-base text-slate-300 hover:text-sky-200"
-                                    onClick={() => setMobileOpen(false)}
+                                    onClick={() => {
+                                        setMobileOpen(false);
+                                        setRequestDropdownOpen(false);
+                                    }}
                                 >
                                     Protest
                                 </Link>
                                 <Link
                                     href={route('requirements.index')}
                                     className="block py-2 text-base text-slate-300 hover:text-sky-200"
-                                    onClick={() => setMobileOpen(false)}
+                                    onClick={() => {
+                                        setMobileOpen(false);
+                                        setRequestDropdownOpen(false);
+                                    }}
                                 >
                                     Requirements
                                 </Link>
