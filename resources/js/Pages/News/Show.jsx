@@ -147,7 +147,7 @@ export default function NewsShow({ news, relatedNews }) {
                 {/* Header */}
                 <div className="bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 border-b border-slate-800">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-                        <div className="text-center">
+                        <div>
                             <Link
                                 href={route('news.index')}
                                 className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-4 md:mb-6 transition-colors text-sm md:text-base"
@@ -158,7 +158,7 @@ export default function NewsShow({ news, relatedNews }) {
                                 Back to News
                             </Link>
 
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 px-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 px-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 text-center">
                                 {news.title}
                             </h1>
                             <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs sm:text-sm text-slate-400">
@@ -279,7 +279,10 @@ export default function NewsShow({ news, relatedNews }) {
                                                 border-radius: 0.5em !important;
                                                 border: 1px solid #475569 !important;
                                                 margin: 1em 0 !important;
-                                                max-width: 100% !important;
+                                                max-width: 100%;
+                                            }
+                                            
+                                            .prose img:not([style*="width"]):not([style*="height"]) {
                                                 height: auto !important;
                                             }
 
@@ -313,6 +316,79 @@ export default function NewsShow({ news, relatedNews }) {
 
                         {/* Sidebar */}
                         <div className="lg:col-span-1 space-y-6">
+                            {/* Share Section */}
+                            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-4 sm:p-6 shadow-xl">
+                                <h3 className="text-lg sm:text-xl font-bold text-slate-100 mb-4 pb-2 border-b border-slate-700/50 flex items-center">
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                    </svg>
+                                    Share this article
+                                </h3>
+                                <div className="flex flex-wrap gap-3">
+                                    <button
+                                        onClick={() => {
+                                            const url = window.location.href;
+                                            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                                        }}
+                                        className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                                    >
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                        </svg>
+                                        <span className="text-sm font-medium">Facebook</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            const url = window.location.href;
+                                            const text = news.title;
+                                            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                                        }}
+                                        className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 bg-black hover:bg-gray-900 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl border border-gray-800"
+                                    >
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                        </svg>
+                                        <span className="text-sm font-medium">X</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(window.location.href);
+                                            alert('Link copied to clipboard!');
+                                        }}
+                                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        <span className="text-sm font-medium">Copy Link</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Author Card */}
+                            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-4 sm:p-6 shadow-xl">
+                                <h3 className="text-lg sm:text-xl font-bold text-slate-100 mb-4 pb-2 border-b border-slate-700/50 flex items-center">
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    About the Author
+                                </h3>
+                                <div className="flex items-start gap-4">
+                                    <div className="flex-shrink-0">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                                            {news.writer_name.charAt(0).toUpperCase()}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="font-semibold text-lg text-slate-100 mb-1">{news.writer_name}</p>
+                                        <p className="text-sm text-blue-400 mb-3">Faculty Writer</p>
+                                        <p className="text-sm text-slate-400 leading-relaxed">
+                                            Contributing writer sharing news and updates about campus events, activities, and student life at Universidad de Dagupan.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Related News */}
                             {relatedNews.length > 0 && (
                                 <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-4 sm:p-6 shadow-xl">

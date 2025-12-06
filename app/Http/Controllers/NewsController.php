@@ -82,15 +82,22 @@ class NewsController extends Controller
         // Use new category if provided, otherwise use the selected category
         $category = $request->filled('newCategory') ? $request->newCategory : $request->category;
 
+        // Generate slug - fallback to ID-based slug if title contains only special characters
+        $slug = Str::slug($request->title);
+        if (empty($slug)) {
+            // If slug is empty (unicode/special chars), create a fallback slug
+            $slug = 'news-' . Str::random(8);
+        }
+
         $newsData = [
             'writer_id' => Auth::id(),
             'writer_name' => Auth::user()->name,
             'title' => $request->title,
-            'slug' => Str::slug($request->title),
+            'slug' => $slug,
             'category' => $category,
             'description' => $request->description,
             'date' => now()->format('F j, Y'),
-            'status' => 'pending',
+            'status' => 'active',
         ];
 
         // Handle image upload if present
@@ -168,7 +175,12 @@ class NewsController extends Controller
 
     if ($request->filled('title')) {
         $updateData['title'] = $request->title;
-        $updateData['slug'] = \Str::slug($request->title);
+        $slug = \Str::slug($request->title);
+        // If slug is empty (unicode/special chars), keep existing slug or create new one
+        if (empty($slug)) {
+            $slug = $news->slug ?: 'news-' . \Str::random(8);
+        }
+        $updateData['slug'] = $slug;
     }
 
     if ($request->filled('description')) {
