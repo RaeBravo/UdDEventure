@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\RegisteredPlayer;
+use App\Models\Player;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +76,8 @@ class EventRegistrationController extends Controller
             // Create team registration
             DB::transaction(function () use ($event, $validated) {
                 foreach ($validated['team_members'] as $member) {
-                    RegisteredPlayer::create([
+                    // Create registered player
+                    $registeredPlayer = RegisteredPlayer::create([
                         'event_id' => $event->id,
                         'student_id' => $member['student_id'],
                         'name' => $member['name'],
@@ -86,6 +88,21 @@ class EventRegistrationController extends Controller
                         'team_name' => $validated['team_name'],
                         'status' => 'pending',
                         'registered_at' => now(),
+                    ]);
+
+                    // Also create player record
+                    Player::create([
+                        'event_id' => $event->id,
+                        'student_id' => $member['student_id'],
+                        'name' => $member['name'],
+                        'email' => $member['email'],
+                        'department' => $member['department'],
+                        'age' => $member['age'],
+                        'gdrive_link' => $member['gdrive_link'],
+                        'team_name' => $validated['team_name'],
+                        'status' => 'pending',
+                        'player_image' => null,
+                        'whiteform_image' => null,
                     ]);
                 }
             });
@@ -126,7 +143,7 @@ class EventRegistrationController extends Controller
             );
 
             // Create individual registration
-            RegisteredPlayer::create([
+            $registeredPlayer = RegisteredPlayer::create([
                 'event_id' => $event->id,
                 'student_id' => $validated['student_id'],
                 'name' => $validated['name'],
@@ -136,6 +153,20 @@ class EventRegistrationController extends Controller
                 'gdrive_link' => $validated['gdrive_link'],
                 'status' => 'pending',
                 'registered_at' => now(),
+            ]);
+
+            // Also create player record
+            Player::create([
+                'event_id' => $event->id,
+                'student_id' => $validated['student_id'],
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'department' => $validated['department'],
+                'age' => $validated['age'],
+                'gdrive_link' => $validated['gdrive_link'],
+                'status' => 'pending',
+                'player_image' => null,
+                'whiteform_image' => null,
             ]);
 
             return redirect()

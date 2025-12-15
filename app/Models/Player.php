@@ -11,11 +11,15 @@ class Player extends Model
 
     protected $fillable = [
         'event_registration_id',
+        'event_id',
         'student_id',
         'name',
         'email',
         'department',
         'age',
+        'gdrive_link',
+        'team_name',
+        'status',
         'player_image',
         'whiteform_image',
     ];
