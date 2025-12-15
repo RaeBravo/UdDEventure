@@ -17,7 +17,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::with('writer')->latest()->get();
+        $news = News::with('faculty')->latest()->get();
 
         $stats = [
             'total' => News::count(),
@@ -90,8 +90,8 @@ class NewsController extends Controller
         }
 
         $newsData = [
-            'writer_id' => Auth::id(),
-            'writer_name' => Auth::user()->name,
+            'faculty_id' => Auth::id(),
+            'faculty_name' => Auth::user()->name,
             'title' => $request->title,
             'slug' => $slug,
             'category' => $category,
@@ -119,7 +119,7 @@ class NewsController extends Controller
         $news->increment('count');
 
         return inertia('Admin/News/Show', [
-            'news' => $news->load('writer'),
+            'news' => $news->load('faculty'),
         ]);
     }
 

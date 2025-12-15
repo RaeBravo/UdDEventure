@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function news()
     {
-        return $this->hasMany(News::class, 'writer_id');
+        return $this->hasMany(News::class, 'faculty_id');
     }
 
     public function facultyProfile()

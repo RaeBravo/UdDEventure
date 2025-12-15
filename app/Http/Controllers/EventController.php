@@ -90,7 +90,7 @@ class EventController extends Controller
                 'category',
                 'status',
                 'date',
-                'writer_name'
+                'faculty_name'
             )
             ->orderBy('date', 'desc')
             ->limit(10)
@@ -102,7 +102,7 @@ class EventController extends Controller
                     'category' => $news->category,
                     'status' => $news->status,
                     'date' => $news->date,
-                    'writer_name' => $news->writer_name,
+                    'writer_name' => $news->faculty_name,
                 ];
             });
 

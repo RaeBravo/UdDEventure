@@ -35,6 +35,6 @@ class Faculty extends Model
      */
     public function news()
     {
-        return $this->hasManyThrough(News::class, User::class, 'id', 'writer_id', 'user_id', 'id');
+        return $this->hasManyThrough(News::class, User::class, 'id', 'faculty_id', 'user_id', 'id');
     }
 }

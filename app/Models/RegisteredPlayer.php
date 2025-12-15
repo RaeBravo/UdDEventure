@@ -18,6 +18,13 @@ class RegisteredPlayer extends Model
         'team_name',
         'status',
         'registered_at',
+        'course',
+        'year_level',
+        'contact_number',
+        'gpa',
+        'enrolled_units',
+        'scholarship_status',
+        'sport_team',
     ];
 
     protected $casts = [

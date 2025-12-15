@@ -10,8 +10,8 @@ class News extends Model
     use HasFactory;
 
     protected $fillable = [
-        'writer_id',
-        'writer_name',
+        'faculty_id',
+        'faculty_name',
         'title',
         'slug',
         'category',
@@ -26,11 +26,11 @@ class News extends Model
     ];
 
     /**
-     * Get the writer that owns the news.
+     * Get the faculty that owns the news.
      */
-    public function writer()
+    public function faculty()
     {
-        return $this->belongsTo(User::class, 'writer_id');
+        return $this->belongsTo(User::class, 'faculty_id');
     }
 
     /**
